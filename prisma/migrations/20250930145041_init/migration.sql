@@ -1,0 +1,45 @@
+-- CreateTable
+CREATE TABLE "Tip" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "agentId" TEXT NOT NULL,
+    "mapId" TEXT NOT NULL,
+    "title" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
+    "type" TEXT,
+    "image" TEXT,
+    "rating" REAL NOT NULL DEFAULT 0,
+    "ratingsCount" INTEGER NOT NULL DEFAULT 0,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+-- CreateTable
+CREATE TABLE "Comment" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "tipId" INTEGER NOT NULL,
+    "author" TEXT NOT NULL,
+    "content" TEXT NOT NULL,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT "Comment_tipId_fkey" FOREIGN KEY ("tipId") REFERENCES "Tip" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
+-- CreateTable
+CREATE TABLE "Favorite" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "tipId" INTEGER NOT NULL,
+    "userId" TEXT NOT NULL,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT "Favorite_tipId_fkey" FOREIGN KEY ("tipId") REFERENCES "Tip" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
+-- CreateTable
+CREATE TABLE "Map" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "mapId" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "images" JSONB,
+    "callouts" JSONB,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Map_mapId_key" ON "Map"("mapId");

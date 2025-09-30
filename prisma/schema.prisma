@@ -1,0 +1,49 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Tip {
+  id           Int      @id @default(autoincrement())
+  agentId      String
+  mapId        String
+  title        String
+  description  String
+  type         String?
+  image        String?
+  rating       Float    @default(0)
+  ratingsCount Int      @default(0)
+  createdAt    DateTime @default(now())
+  comments     Comment[]
+  favorites    Favorite[]
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  tip       Tip      @relation(fields: [tipId], references: [id])
+  tipId     Int
+  author    String
+  content   String
+  createdAt DateTime @default(now())
+}
+
+model Favorite {
+  id        Int      @id @default(autoincrement())
+  tip       Tip      @relation(fields: [tipId], references: [id])
+  tipId     Int
+  userId    String
+  createdAt DateTime @default(now())
+}
+
+model Map {
+  id       Int    @id @default(autoincrement())
+  mapId    String @unique
+  name     String
+  images   Json?
+  callouts Json?
+  createdAt DateTime @default(now())
+}
